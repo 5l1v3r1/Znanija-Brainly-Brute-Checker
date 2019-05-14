@@ -1,2 +1,5 @@
 # Znanija-Brainly-Brute-Checker
-Checker for Znanija.com
+Simple multithreading checker for Znanija.com
+
+How to use:
+
