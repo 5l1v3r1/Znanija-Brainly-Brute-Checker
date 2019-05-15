@@ -12,7 +12,7 @@ class Checker(object):
         try:
             self.filename = open('./results/BRAINLY-{}.txt'.format(self.date), 'a')
         except FileNotFoundError:
-            os.mkdir('result')
+            os.mkdir('results')
             self.filename = open('./results/BRAINLY-{}.txt'.format(self.date), 'a')
 
 
