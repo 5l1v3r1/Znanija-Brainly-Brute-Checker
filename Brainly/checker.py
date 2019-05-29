@@ -100,4 +100,3 @@ if __name__ == '__main__':
             os._exit(1)
         except:
             logging.error('Что-то пошло не так')
-
