@@ -2,11 +2,7 @@ import logging, brainly_api, itertools
 
 info = 'Checker by _Skill_'
 logging.basicConfig(level=logging.INFO)
-def move_cursor(x,y):
-    print ("\x1b[{};{}H".format(y+1,x+1))
- 
-def clear():
-    print ("\x1b[2J")
+
 
 
 class Checker(object):
